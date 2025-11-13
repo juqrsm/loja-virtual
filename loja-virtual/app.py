@@ -66,6 +66,24 @@ def cadastrarProduto():
         # Exibe o formulário normalmente
         return render_template("produtos/cadastrar.html")
 
+# Rota para listar todos os produtos
+@app.route('/produtos')
+def listarProdutos():
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        sql = "SELECT * FROM TBPRODUTOS"
+        cursor.execute(sql)
+
+        produtos = cursor.fetchall()
+        conn.close()
+
+        return render_template("produtos/lista-produtos.html", produtos=produtos)
+
+    except Exception as e:
+        return f"Erro ao listar produtos: {str(e)}"
+
 # Inicia o servidor Flask se rodar o arquivo direto 
 if __name__ == "__main__":
     app.run(debug=True)
